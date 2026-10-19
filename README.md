@@ -10,6 +10,8 @@ sudo dnf -y install dnf-plugins-core
 sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
 sudo dnf -y install docker-ce docker-ce-cli containerd.io
 sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+newgrp docker
 
 # Run mini-proxmox
 git clone https://github.com/TanBread/mini-proxmox.git
