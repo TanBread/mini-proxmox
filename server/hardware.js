@@ -124,7 +124,7 @@ function getStorageInfo() {
 }
 
 function getAppVersion() {
-  return process.env.APP_VERSION || '1.3.0';
+  return process.env.APP_VERSION || '1.3.1';
 }
 
 function getHardwareInfo() {
