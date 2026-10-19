@@ -80,6 +80,24 @@ export default function ContainerDetail() {
     { id: 'logs', label: 'Logs', icon: FileText },
   ]
 
+  function formatUptime(startedAt) {
+    if (!startedAt || startedAt.startsWith('0001')) return '-'
+    const start = new Date(startedAt)
+    if (isNaN(start)) return '-'
+    let seconds = Math.floor((Date.now() - start.getTime()) / 1000)
+    if (seconds < 0) return '-'
+    const d = Math.floor(seconds / 86400)
+    seconds %= 86400
+    const h = Math.floor(seconds / 3600)
+    seconds %= 3600
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    if (d > 0) return `${d}d ${h}h ${m}m`
+    if (h > 0) return `${h}h ${m}m ${s}s`
+    if (m > 0) return `${m}m ${s}s`
+    return `${s}s`
+  }
+
   return (
     <div className="p-6">
       <Link to="/containers" className="mb-4 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white">
@@ -140,8 +158,9 @@ export default function ContainerDetail() {
                 ['ID', info.id?.slice(0, 12)],
                 ['Image', info.image],
                 ['State', info.state],
+                ['Uptime', formatUptime(info.startedAt)],
                 ['Created', new Date(info.created).toLocaleString()],
-                ['Started', info.startedAt ? new Date(info.startedAt).toLocaleString() : '-'],
+                ['Started', info.startedAt && !info.startedAt.startsWith('0001') ? new Date(info.startedAt).toLocaleString() : '-'],
                 ['Restart Count', info.restartCount],
                 ['Privileged', info.privileged ? 'Yes' : 'No'],
                 ['Network Mode', info.networkMode],
@@ -178,6 +197,14 @@ export default function ContainerDetail() {
                   <div>
                     <p className="text-xs text-slate-500">Sent Data</p>
                     <p className="text-lg font-bold text-orange-400">{formatBytes(stats.netTx)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">Disk Read</p>
+                    <p className="text-lg font-bold text-cyan-400">{formatBytes(stats.blockRead || 0)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">Disk Write</p>
+                    <p className="text-lg font-bold text-yellow-400">{formatBytes(stats.blockWrite || 0)}</p>
                   </div>
                 </div>
               </Card>
