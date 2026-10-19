@@ -40,6 +40,13 @@ docker run -d --privileged --pid=host -p 3000:3000 \
 
 Open [localhost:3000](http://localhost:3000)
 
+## Update
+
+```bash
+cd mini-proxmox
+./update.sh
+```
+
 ## Features
 
 Dashboard, Containers, Images, Networks, Volumes, Terminal (with sudo), File editor, Logs.
