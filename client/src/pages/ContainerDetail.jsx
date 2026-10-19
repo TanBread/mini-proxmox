@@ -172,11 +172,11 @@ export default function ContainerDetail() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Net RX</p>
+                    <p className="text-xs text-slate-500">Received Data</p>
                     <p className="text-lg font-bold text-green-400">{formatBytes(stats.netRx)}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Net TX</p>
+                    <p className="text-xs text-slate-500">Sent Data</p>
                     <p className="text-lg font-bold text-orange-400">{formatBytes(stats.netTx)}</p>
                   </div>
                 </div>
