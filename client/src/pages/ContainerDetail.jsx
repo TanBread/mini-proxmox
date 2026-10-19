@@ -27,7 +27,7 @@ export default function ContainerDetail() {
 
   useEffect(() => {
     load()
-    const interval = setInterval(load, 3000)
+    const interval = setInterval(load, 5000)
     return () => clearInterval(interval)
   }, [id])
 
