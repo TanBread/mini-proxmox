@@ -17,8 +17,11 @@ function createTerminal(ws) {
 
   if (inContainer) {
     // Enter host namespaces (requires --pid=host on the container)
+    const hostUser = process.env.HOST_USER;
     spawnShell = 'nsenter';
-    spawnArgs = ['-t', '1', '-m', '-u', '-i', '-n', '-p', '--', '/bin/bash', '-l'];
+    spawnArgs = hostUser
+      ? ['-t', '1', '-m', '-u', '-i', '-n', '-p', '--', 'su', '-', hostUser]
+      : ['-t', '1', '-m', '-u', '-i', '-n', '-p', '--', '/bin/bash', '-l'];
     cwd = '/';
   }
 

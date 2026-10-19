@@ -14,10 +14,11 @@ docker stop mini-proxmox 2>/dev/null || true
 docker rm mini-proxmox 2>/dev/null || true
 
 docker run -d --name mini-proxmox --restart=always --privileged --pid=host \
-  -p 3000:3000 \
+  -p 3001:3000 \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /:/host \
   -e HOST_ROOT=/host \
+  -e HOST_USER="${HOST_USER:-$USER}" \
   mini-proxmox
 
-echo "Done! Open http://localhost:3000"
+echo "Done! Open http://localhost:3001"

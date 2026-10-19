@@ -21,7 +21,7 @@ cd mini-proxmox
 docker build -t mini-proxmox .
 docker run -d --privileged --pid=host -p 3000:3000 \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /:/host -e HOST_ROOT=/host \
+  -v /:/host -e HOST_ROOT=/host -e HOST_USER=$USER \
   mini-proxmox
 ```
 
@@ -36,7 +36,7 @@ cd mini-proxmox
 docker build -t mini-proxmox .
 docker run -d --privileged --pid=host -p 3000:3000 \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /:/host -e HOST_ROOT=/host \
+  -v /:/host -e HOST_ROOT=/host -e HOST_USER=$USER \
   mini-proxmox
 ```
 

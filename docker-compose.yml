@@ -12,5 +12,6 @@ services:
       - /:/host
     environment:
       - HOST_ROOT=/host
+      - HOST_USER=${USER}
       - JWT_SECRET=change-this-to-a-long-random-string
       - PORT=3000
