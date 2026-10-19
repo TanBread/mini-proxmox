@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react'
 import { get, post, del } from '../api'
-import { PageHeader, Card, Button, formatBytes, formatDate } from '../components/ui'
-import { HardDrive, Trash2, Plus, RefreshCw } from 'lucide-react'
+import { PageHeader, Card, Button, formatBytes } from '../components/ui'
+import { HardDrive, Trash2, Plus, RefreshCw, Disc } from 'lucide-react'
 
 export default function Volumes() {
   const [volumes, setVolumes] = useState([])
+  const [storage, setStorage] = useState(null)
   const [showCreate, setShowCreate] = useState(false)
   const [name, setName] = useState('')
 
   async function load() {
     try {
-      setVolumes(await get('/volumes'))
+      const [v, hw] = await Promise.all([
+        get('/volumes'),
+        get('/system/hardware').catch(() => null),
+      ])
+      setVolumes(v)
+      if (hw?.storage) setStorage(hw.storage)
     } catch {}
   }
 
@@ -44,7 +50,7 @@ export default function Volumes() {
     <div className="p-6">
       <PageHeader
         title="Volumes"
-        subtitle={`${volumes.length} volumes`}
+        subtitle={`${volumes.length} volumes · ${storage?.driveCount || 0} drives`}
         actions={
           <>
             <Button onClick={load} variant="ghost" size="sm">
@@ -73,7 +79,9 @@ export default function Volumes() {
         </Card>
       )}
 
-      <div className="space-y-3">
+      {/* Docker Volumes */}
+      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-500">Docker Volumes</h3>
+      <div className="mb-8 space-y-3">
         {volumes.map((v) => (
           <Card key={v.name} className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
@@ -94,7 +102,31 @@ export default function Volumes() {
           </Card>
         ))}
         {volumes.length === 0 && (
-          <Card className="p-12 text-center text-slate-500">No volumes found</Card>
+          <Card className="p-8 text-center text-slate-500">No Docker volumes found</Card>
+        )}
+      </div>
+
+      {/* System Drives */}
+      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-500">
+        System Drives {storage ? `· ${formatBytes(storage.totalStorage)} total` : ''}
+      </h3>
+      <div className="space-y-3">
+        {storage?.drives?.length > 0 ? (
+          storage.drives.map((d, i) => (
+            <Card key={i} className="flex items-center justify-between p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-800">
+                  <Disc className="h-5 w-5 text-slate-400" />
+                </div>
+                <div>
+                  <p className="font-mono font-medium text-white">{d.name}</p>
+                  <p className="text-xs text-slate-500">{d.size}</p>
+                </div>
+              </div>
+            </Card>
+          ))
+        ) : (
+          <Card className="p-8 text-center text-slate-500">No drive info available</Card>
         )}
       </div>
     </div>
