@@ -27,7 +27,14 @@ fi
 
 echo "==> Cloning repo..."
 if [ -d "$DIR/.git" ]; then
-  git -C "$DIR" pull --ff-only
+  git -C "$DIR" fetch origin
+  # Old clones may still be on master; switch to main
+  if git -C "$DIR" show-ref --verify --quiet refs/heads/main || git -C "$DIR" show-ref --verify --quiet refs/remotes/origin/main; then
+    git -C "$DIR" branch -m "$(git -C "$DIR" branch --show-current)" main 2>/dev/null || true
+    git -C "$DIR" branch -u origin/main main 2>/dev/null || true
+    git -C "$DIR" checkout main 2>/dev/null || true
+  fi
+  git -C "$DIR" pull --ff-only || true
 else
   git clone "$REPO" "$DIR"
 fi
