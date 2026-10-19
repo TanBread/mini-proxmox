@@ -161,6 +161,28 @@ app.get('/api/images', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/images/search', requireAuth, async (req, res) => {
+  try {
+    const q = (req.query.q || '').trim();
+    if (!q) return res.json([]);
+    const r = await fetch(
+      `https://hub.docker.com/v2/search/repositories/?query=${encodeURIComponent(q)}&page_size=8`
+    );
+    const data = await r.json();
+    res.json(
+      (data.results || []).map((x) => ({
+        name: x.repo_name,
+        isOfficial: x.is_official,
+        stars: x.star_count,
+        pulls: x.pull_count,
+        description: x.short_description,
+      }))
+    );
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.post('/api/images/pull', requireAuth, requireAdmin, async (req, res) => {
   try {
     const { tag } = req.body;
