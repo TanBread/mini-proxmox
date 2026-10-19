@@ -1,6 +1,6 @@
 # mini-proxmox
 
-<!-- This is hidden! You can't see it on GitHub but it's still in the file. -->
+<!-- use these signs to stop stuff from showing up -->
 
 A Proxmox-style web dashboard for managing your Docker server.
 
@@ -48,7 +48,7 @@ Open [localhost:3000](http://localhost:3000) — login: `admin` / `admin12345`
 cd && cd mini-proxmox && git pull && ./update.sh
 ```
 
-## Features
+<!-- ## Features
 
 Dashboard, Containers, Images, Networks, Volumes, Terminal (with sudo), File editor, Logs.
 
@@ -56,3 +56,4 @@ Dashboard, Containers, Images, Networks, Volumes, Terminal (with sudo), File edi
 |----------|----------|------|
 | admin | admin12345 | full access |
 | user | user123456 | read-only |
+-->
