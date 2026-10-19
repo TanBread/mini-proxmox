@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { get } from '../api'
 import { PageHeader, Card, formatBytes, StatusBadge } from '../components/ui'
-import { Box, Layers, HardDrive, Globe, Cpu, MemoryStick, HardDrive as Disk } from 'lucide-react'
+import { Box, Layers, HardDrive, Globe, Cpu, MemoryStick, Monitor, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 export default function Dashboard() {
@@ -10,6 +10,10 @@ export default function Dashboard() {
   const [containers, setContainers] = useState([])
   const [cpuHistory, setCpuHistory] = useState([])
   const [memHistory, setMemHistory] = useState([])
+  const [gpuHistory, setGpuHistory] = useState([])
+  const [netUpHistory, setNetUpHistory] = useState([])
+  const [netDownHistory, setNetDownHistory] = useState([])
+  const [gpuInfo, setGpuInfo] = useState(null)
 
   useEffect(() => {
     let interval
@@ -25,7 +29,7 @@ export default function Dashboard() {
     return () => clearInterval(interval)
   }, [])
 
-  // Mock host stats via container stats aggregation (simplified)
+  // Mock CPU/mem stats
   useEffect(() => {
     let t = 50
     let m = 40
@@ -39,6 +43,30 @@ export default function Dashboard() {
     return () => clearInterval(interval)
   }, [])
 
+  // Real GPU + network stats
+  useEffect(() => {
+    let interval
+    async function loadStats() {
+      try {
+        const s = await get('/system/stats')
+        const now = new Date().toLocaleTimeString()
+        if (s.gpu) {
+          setGpuInfo(s.gpu)
+          setGpuHistory((h) => [...h.slice(-29), { time: now, value: s.gpu.usage }])
+        }
+        if (s.netTxRate !== null && s.netTxRate !== undefined) {
+          setNetUpHistory((h) => [...h.slice(-29), { time: now, value: Math.round(s.netTxRate) }])
+        }
+        if (s.netRxRate !== null && s.netRxRate !== undefined) {
+          setNetDownHistory((h) => [...h.slice(-29), { time: now, value: Math.round(s.netRxRate) }])
+        }
+      } catch {}
+    }
+    loadStats()
+    interval = setInterval(loadStats, 2000)
+    return () => clearInterval(interval)
+  }, [])
+
   const running = containers.filter((c) => c.state === 'running').length
 
   const stats = [
@@ -47,6 +75,11 @@ export default function Dashboard() {
     { label: 'Volumes', value: '-', sub: 'managed', icon: HardDrive, color: 'text-green-400 bg-green-500/10', link: '/volumes' },
     { label: 'Networks', value: '-', sub: 'active', icon: Globe, color: 'text-orange-400 bg-orange-500/10', link: '/networks' },
   ]
+
+  const tooltipStyle = {
+    contentStyle: { background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', fontSize: '12px' },
+    labelStyle: { color: '#94a3b8' },
+  }
 
   return (
     <div className="p-6">
@@ -81,10 +114,7 @@ export default function Dashboard() {
             <AreaChart data={cpuHistory}>
               <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
               <YAxis stroke="#475569" fontSize={11} tickLine={false} domain={[0, 100]} />
-              <Tooltip
-                contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', fontSize: '12px' }}
-                labelStyle={{ color: '#94a3b8' }}
-              />
+              <Tooltip {...tooltipStyle} />
               <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.1} strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
@@ -104,11 +134,80 @@ export default function Dashboard() {
             <AreaChart data={memHistory}>
               <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
               <YAxis stroke="#475569" fontSize={11} tickLine={false} domain={[0, 100]} />
-              <Tooltip
-                contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', fontSize: '12px' }}
-                labelStyle={{ color: '#94a3b8' }}
-              />
+              <Tooltip {...tooltipStyle} />
               <Area type="monotone" dataKey="value" stroke="#a855f7" fill="#a855f7" fillOpacity={0.1} strokeWidth={2} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </Card>
+
+        {/* GPU - full size, same row style as CPU/Memory but full width if no mem info */}
+        <Card className="p-5 lg:col-span-2">
+          <div className="mb-4 flex items-center gap-2">
+            <Monitor className="h-4 w-4 text-orange-400" />
+            <h3 className="font-semibold text-white">GPU Usage</h3>
+            {gpuInfo && (
+              <span className="ml-auto text-xs text-slate-500">
+                {gpuInfo.memUsed !== null && gpuInfo.memTotal !== null
+                  ? `${gpuInfo.memUsed} / ${gpuInfo.memTotal} MB`
+                  : ''}
+              </span>
+            )}
+          </div>
+          {gpuHistory.length > 0 ? (
+            <ResponsiveContainer width="100%" height={200}>
+              <AreaChart data={gpuHistory}>
+                <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
+                <YAxis stroke="#475569" fontSize={11} tickLine={false} domain={[0, 100]} />
+                <Tooltip {...tooltipStyle} />
+                <Area type="monotone" dataKey="value" stroke="#f97316" fill="#f97316" fillOpacity={0.1} strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex h-[200px] items-center justify-center text-sm text-slate-600">
+              No GPU detected
+            </div>
+          )}
+        </Card>
+      </div>
+
+      {/* Network - two half-size graphs side by side */}
+      <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card className="p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <ArrowDownToLine className="h-4 w-4 text-green-400" />
+            <h3 className="font-semibold text-white">Network Down</h3>
+            {netDownHistory.length > 0 && (
+              <span className="ml-auto text-xs text-slate-500">
+                {formatBytes(netDownHistory[netDownHistory.length - 1].value)}/s
+              </span>
+            )}
+          </div>
+          <ResponsiveContainer width="100%" height={140}>
+            <AreaChart data={netDownHistory}>
+              <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
+              <YAxis stroke="#475569" fontSize={11} tickLine={false} />
+              <Tooltip {...tooltipStyle} formatter={(v) => [`${formatBytes(v)}/s`, 'Rate']} />
+              <Area type="monotone" dataKey="value" stroke="#22c55e" fill="#22c55e" fillOpacity={0.1} strokeWidth={2} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </Card>
+
+        <Card className="p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <ArrowUpFromLine className="h-4 w-4 text-orange-400" />
+            <h3 className="font-semibold text-white">Network Up</h3>
+            {netUpHistory.length > 0 && (
+              <span className="ml-auto text-xs text-slate-500">
+                {formatBytes(netUpHistory[netUpHistory.length - 1].value)}/s
+              </span>
+            )}
+          </div>
+          <ResponsiveContainer width="100%" height={140}>
+            <AreaChart data={netUpHistory}>
+              <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
+              <YAxis stroke="#475569" fontSize={11} tickLine={false} />
+              <Tooltip {...tooltipStyle} formatter={(v) => [`${formatBytes(v)}/s`, 'Rate']} />
+              <Area type="monotone" dataKey="value" stroke="#f97316" fill="#f97316" fillOpacity={0.1} strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </Card>

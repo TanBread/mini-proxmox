@@ -8,6 +8,7 @@ const docker = require('./docker');
 const files = require('./files');
 const { createTerminal } = require('./terminal');
 const { getHardwareInfo } = require('./hardware');
+const { getStatsSnapshot } = require('./stats');
 
 const app = express();
 const server = http.createServer(app);
@@ -49,6 +50,14 @@ app.get('/api/system/df', requireAuth, async (req, res) => {
 app.get('/api/system/hardware', requireAuth, async (req, res) => {
   try {
     res.json(getHardwareInfo());
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/system/stats', requireAuth, async (req, res) => {
+  try {
+    res.json(getStatsSnapshot());
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
