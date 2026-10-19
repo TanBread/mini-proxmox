@@ -19,7 +19,7 @@ FROM node:20-bookworm-slim
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
-RUN apt-get update && apt-get install -y --no-install-recommends bash procps && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends bash procps util-linux && rm -rf /var/lib/apt/lists/*
 COPY --from=server-build /app/server/node_modules ./server/node_modules
 COPY --from=server-build /app/server ./server
 COPY --from=client-build /app/client/dist ./client/dist

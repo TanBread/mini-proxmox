@@ -17,7 +17,7 @@ newgrp docker
 git clone https://github.com/TanBread/mini-proxmox.git
 cd mini-proxmox
 docker build -t mini-proxmox .
-docker run -d --privileged -p 3000:3000 \
+docker run -d --privileged --pid=host -p 3000:3000 \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /:/host -e HOST_ROOT=/host \
   mini-proxmox
@@ -32,7 +32,7 @@ curl -fsSL https://get.docker.com | sh
 git clone https://github.com/TanBread/mini-proxmox.git
 cd mini-proxmox
 docker build -t mini-proxmox .
-docker run -d --privileged -p 3000:3000 \
+docker run -d --privileged --pid=host -p 3000:3000 \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /:/host -e HOST_ROOT=/host \
   mini-proxmox

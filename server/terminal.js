@@ -3,14 +3,30 @@ const os = require('os');
 
 function createTerminal(ws) {
   const isWin = os.platform() === 'win32';
+  const hostRoot = process.env.HOST_ROOT;
   const shell = isWin ? 'powershell.exe' : '/bin/bash';
   const args = isWin ? [] : ['-l'];
+  // When running in container (HOST_ROOT=/host), use nsenter to get a real host shell
+  const inContainer = !isWin && hostRoot && hostRoot !== '/';
 
-  const ptyProcess = pty.spawn(shell, args, {
+  let spawnShell = shell;
+  let spawnArgs = args;
+  let cwd = isWin
+    ? process.env.USERPROFILE || 'C:\\'
+    : process.env.HOME || '/';
+
+  if (inContainer) {
+    // Enter host namespaces (requires --pid=host on the container)
+    spawnShell = 'nsenter';
+    spawnArgs = ['-t', '1', '-m', '-u', '-i', '-n', '-p', '--', '/bin/bash', '-l'];
+    cwd = '/';
+  }
+
+  const ptyProcess = pty.spawn(spawnShell, spawnArgs, {
     name: 'xterm-256color',
     cols: 120,
     rows: 30,
-    cwd: isWin ? process.env.USERPROFILE || 'C:\\' : process.env.HOME || '/',
+    cwd,
     env: { ...process.env, TERM: 'xterm-256color' },
   });
 
