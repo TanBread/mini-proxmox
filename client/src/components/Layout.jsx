@@ -65,8 +65,10 @@ export default function Layout() {
           ))}
         </nav>
 
-        <div className="border-t border-slate-800 p-3">
-          <p className="mb-2 px-3 text-center text-xs text-slate-600">v1.3.1</p>
+        <div className="relative border-t border-slate-800 p-3 pt-4">
+          <span className="absolute -top-2.5 right-3 bg-slate-950 px-2 text-sm text-slate-600">
+            v1.3.1
+          </span>
           <button
             onClick={logout}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800 hover:text-red-400"
