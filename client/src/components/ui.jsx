@@ -22,7 +22,7 @@ export function StatusBadge({ state }) {
       }`}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${dot[state] || dot.exited}`} />
-      {state}
+      {state.charAt(0).toUpperCase() + state.slice(1)}
     </span>
   )
 }

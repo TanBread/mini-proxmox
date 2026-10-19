@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { get, post, del } from '../api'
 import { PageHeader, Card, StatusBadge, Button, formatDate } from '../components/ui'
 import { Play, Square, RotateCw, Trash2, Plus, RefreshCw, Pause, Eye, Box } from 'lucide-react'
 
 export default function Containers() {
+  const navigate = useNavigate()
   const [containers, setContainers] = useState([])
   const [loading, setLoading] = useState(true)
   const [showCreate, setShowCreate] = useState(false)
@@ -120,7 +121,11 @@ export default function Containers() {
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {containers.map((c) => (
-            <Card key={c.id} className="p-5 transition-colors hover:border-slate-700">
+            <Card
+              key={c.id}
+              className="cursor-pointer p-5 transition-colors hover:border-slate-700"
+              onClick={() => navigate(`/containers/${c.id}`)}
+            >
               <div className="mb-4 flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-800">
@@ -148,7 +153,10 @@ export default function Containers() {
                 </div>
               )}
 
-              <div className="flex items-center gap-1.5 border-t border-slate-800 pt-3">
+              <div
+                className="flex items-center gap-1.5 border-t border-slate-800 pt-3"
+                onClick={(e) => e.stopPropagation()}
+              >
                 {c.state === 'running' ? (
                   <>
                     <Button size="sm" variant="ghost" onClick={() => action(c.id, 'stop')} disabled={busy === c.id + 'stop'}>
