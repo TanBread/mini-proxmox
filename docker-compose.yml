@@ -1,0 +1,15 @@
+services:
+  mini-proxmox:
+    build: .
+    container_name: mini-proxmox
+    restart: always
+    privileged: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /:/host
+    environment:
+      - HOST_ROOT=/host
+      - JWT_SECRET=change-this-to-a-long-random-string
+      - PORT=3000
