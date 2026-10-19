@@ -155,16 +155,15 @@ export default function ContainerDetail() {
             <h3 className="mb-4 font-semibold text-white">Details</h3>
             <dl className="space-y-3 text-sm">
               {[
-                ['ID', info.id?.slice(0, 12)],
-                ['Image', info.image],
-                ['State', info.state],
                 ['Uptime', formatUptime(info.startedAt)],
-                ['Created', new Date(info.created).toLocaleString()],
-                ['Started', info.startedAt && !info.startedAt.startsWith('0001') ? new Date(info.startedAt).toLocaleString() : '-'],
+                ['Image & Version', info.image],
+                ['State', info.state],
                 ['Restart Count', info.restartCount],
+                ['Restart Policy', info.restartPolicy?.Name || '-'],
                 ['Privileged', info.privileged ? 'Yes' : 'No'],
                 ['Network Mode', info.networkMode],
-                ['Restart Policy', info.restartPolicy?.Name || '-'],
+                ['Creation Time', new Date(info.created).toLocaleString()],
+                ['Start Time', info.startedAt && !info.startedAt.startsWith('0001') ? new Date(info.startedAt).toLocaleString() : '-'],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between border-b border-slate-800 pb-2">
                   <dt className="text-slate-500">{k}</dt>
