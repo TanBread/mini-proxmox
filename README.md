@@ -1,5 +1,7 @@
 # mini-proxmox
 
+<!-- This is hidden! You can't see it on GitHub but it's still in the file. -->
+
 A Proxmox-style web dashboard for managing your Docker server.
 
 ## Deploying on Fedora
@@ -43,7 +45,7 @@ Open [localhost:3000](http://localhost:3000) — login: `admin` / `admin12345`
 ## How to Update
 
 ```bash
-cd mini-proxmox && git pull && ./update.sh
+cd && cd mini-proxmox && git pull && ./update.sh
 ```
 
 ## Features
