@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { get } from '../api'
 import { PageHeader, Card, formatBytes, StatusBadge } from '../components/ui'
@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [netUpHistory, setNetUpHistory] = useState([])
   const [netDownHistory, setNetDownHistory] = useState([])
   const [gpuInfo, setGpuInfo] = useState(null)
+  const netBufRef = useRef({ up: [], down: [] })
 
   useEffect(() => {
     let interval
@@ -55,10 +56,18 @@ export default function Dashboard() {
           setGpuHistory((h) => [...h.slice(-29), { time: now, value: s.gpu.usage }])
         }
         if (s.netTxRate !== null && s.netTxRate !== undefined) {
-          setNetUpHistory((h) => [...h.slice(-29), { time: now, value: Math.round(s.netTxRate) }])
+          const buf = netBufRef.current
+          buf.up.push(s.netTxRate)
+          if (buf.up.length > 5) buf.up.shift()
+          const avgUp = buf.up.reduce((a, b) => a + b, 0) / buf.up.length
+          setNetUpHistory((h) => [...h.slice(-29), { time: now, value: Math.round(avgUp) }])
         }
         if (s.netRxRate !== null && s.netRxRate !== undefined) {
-          setNetDownHistory((h) => [...h.slice(-29), { time: now, value: Math.round(s.netRxRate) }])
+          const buf = netBufRef.current
+          buf.down.push(s.netRxRate)
+          if (buf.down.length > 5) buf.down.shift()
+          const avgDown = buf.down.reduce((a, b) => a + b, 0) / buf.down.length
+          setNetDownHistory((h) => [...h.slice(-29), { time: now, value: Math.round(avgDown) }])
         }
       } catch {}
     }
