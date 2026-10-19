@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { get } from '../api'
 import { PageHeader, Card, formatBytes, StatusBadge } from '../components/ui'
+import BrailleGraph from '../components/BrailleGraph'
 import { Box, Layers, HardDrive, Globe, Cpu, MemoryStick, Monitor, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
@@ -191,14 +192,7 @@ export default function Dashboard() {
               </span>
             )}
           </div>
-          <ResponsiveContainer width="100%" height={140}>
-            <AreaChart data={netDownHistory} margin={{ top: 8, right: 0, left: 0, bottom: 0 }}>
-              <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
-              <YAxis stroke="#475569" fontSize={11} tickLine={false} width={40} />
-              <Tooltip {...tooltipStyle} formatter={(v) => [`${formatBytes(v)}/s`, 'Rate']} />
-              <Area type="monotone" dataKey="value" stroke="#22c55e" fill="#22c55e" fillOpacity={0.1} strokeWidth={2} />
-            </AreaChart>
-          </ResponsiveContainer>
+          <BrailleGraph data={netDownHistory.map((p) => p.value)} />
         </Card>
 
         <Card className="p-5">
@@ -211,14 +205,7 @@ export default function Dashboard() {
               </span>
             )}
           </div>
-          <ResponsiveContainer width="100%" height={140}>
-            <AreaChart data={netUpHistory} margin={{ top: 8, right: 0, left: 0, bottom: 0 }}>
-              <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
-              <YAxis stroke="#475569" fontSize={11} tickLine={false} width={40} />
-              <Tooltip {...tooltipStyle} formatter={(v) => [`${formatBytes(v)}/s`, 'Rate']} />
-              <Area type="monotone" dataKey="value" stroke="#f97316" fill="#f97316" fillOpacity={0.1} strokeWidth={2} />
-            </AreaChart>
-          </ResponsiveContainer>
+          <BrailleGraph data={netUpHistory.map((p) => p.value)} />
         </Card>
       </div>
 
