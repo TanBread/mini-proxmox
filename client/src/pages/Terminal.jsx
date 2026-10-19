@@ -79,8 +79,16 @@ export default function Terminal() {
     }
     window.addEventListener('resize', resizeHandler)
 
+    // Re-fit when the container resizes (e.g. after layout settles)
+    const observer = new ResizeObserver(resizeHandler)
+    observer.observe(containerRef.current)
+
+    // Fit again on next frame after layout
+    requestAnimationFrame(resizeHandler)
+
     return () => {
       window.removeEventListener('resize', resizeHandler)
+      observer.disconnect()
       ws.close()
       term.dispose()
     }
@@ -100,7 +108,7 @@ export default function Terminal() {
   }
 
   return (
-    <div className="flex flex-col p-6">
+    <div className="flex h-full flex-col p-6">
       <PageHeader
         title="Terminal"
         subtitle={connected ? 'Connected — full shell with sudo' : 'Connecting...'}
@@ -123,7 +131,7 @@ export default function Terminal() {
         }
       />
 
-      <Card className="flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 160px)' }}>
+      <Card className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-2 border-b border-slate-800 px-4 py-2">
           <TerminalSquare className="h-4 w-4 text-slate-500" />
           <span className="text-sm text-slate-400">host shell</span>
@@ -131,7 +139,7 @@ export default function Terminal() {
             className={`ml-auto h-2 w-2 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'}`}
           />
         </div>
-        <div ref={containerRef} className="flex-1 p-2" />
+        <div ref={containerRef} className="min-h-0 flex-1 p-2" />
       </Card>
     </div>
   )
