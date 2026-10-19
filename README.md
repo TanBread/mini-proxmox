@@ -7,7 +7,7 @@ A Proxmox-style web dashboard for managing your Docker server.
 ```bash
 # Install Docker
 sudo dnf -y install dnf-plugins-core
-sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
 sudo dnf -y install docker-ce docker-ce-cli containerd.io
 sudo systemctl enable --now docker
 
