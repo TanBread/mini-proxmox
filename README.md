@@ -43,7 +43,7 @@ Open [localhost:3000](http://localhost:3000) — login: `admin` / `admin12345`
 ## How to Update
 
 ```bash
-cd mini-proxmox && ./update.sh
+cd mini-proxmox && git pull && ./update.sh
 ```
 
 ## Features
