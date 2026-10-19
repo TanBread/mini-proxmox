@@ -49,9 +49,7 @@ cd && cd mini-proxmox && git pull && ./update.sh
 ```
 
 <!-- ## Features
-
 Dashboard, Containers, Images, Networks, Volumes, Terminal (with sudo), File editor, Logs.
-
 | Username | Password | Role |
 |----------|----------|------|
 | admin | admin12345 | full access |
