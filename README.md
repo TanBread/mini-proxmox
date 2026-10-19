@@ -2,7 +2,7 @@
 
 A Proxmox-style web dashboard for managing your Docker server.
 
-## Deploy on Fedora
+## Deploying on Fedora
 
 ```bash
 # Install Docker
@@ -25,7 +25,7 @@ docker run -d --privileged --pid=host -p 3000:3000 \
 
 Open [localhost:3000](http://localhost:3000) — login: `admin` / `admin12345`
 
-## Deploy on Ubuntu
+## Deploying on Ubuntu
 
 ```bash
 curl -fsSL https://get.docker.com | sh
@@ -38,9 +38,9 @@ docker run -d --privileged --pid=host -p 3000:3000 \
   mini-proxmox
 ```
 
-Open [localhost:3000](http://localhost:3000)
+Open [localhost:3000](http://localhost:3000) — login: `admin` / `admin12345`
 
-## Update
+## How to Update
 
 ```bash
 cd mini-proxmox
