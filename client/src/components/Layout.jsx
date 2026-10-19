@@ -67,7 +67,7 @@ export default function Layout() {
 
         <div className="relative border-t border-slate-800 p-3 pt-4">
           <span className="absolute -top-2.5 right-3 bg-slate-950 px-2 text-sm text-slate-600">
-            v1.3.1
+            v1.4.0
           </span>
           <button
             onClick={logout}
