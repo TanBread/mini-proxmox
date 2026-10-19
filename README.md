@@ -21,7 +21,7 @@ docker run -d --privileged -p 3000:3000 \
   mini-proxmox
 ```
 
-Open `http://your-ip:3000` — login: `admin` / `admin12345`
+Open `localhost:3000` — login: `admin` / `admin12345`
 
 ## Deploy on Ubuntu
 
@@ -36,7 +36,7 @@ docker run -d --privileged -p 3000:3000 \
   mini-proxmox
 ```
 
-Open `http://your-ip:3000`
+Open `localhost:3000`
 
 ## Features
 
