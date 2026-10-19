@@ -115,23 +115,23 @@ export default function Dashboard() {
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card className="p-5">
-          <div className="mb-5 flex items-center gap-2">
+        <Card className="py-5 pr-5 pl-3">
+          <div className="mb-6 flex items-center gap-2">
             <Cpu className="h-4 w-4 text-blue-400" />
             <h3 className="font-semibold text-white">CPU Usage</h3>
           </div>
           <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={cpuHistory} margin={{ top: 8, right: 0, left: 0, bottom: 0 }}>
+            <AreaChart data={cpuHistory} margin={{ top: 18, right: 0, left: 0, bottom: 0 }}>
               <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
-              <YAxis stroke="#475569" fontSize={11} tickLine={false} domain={[0, 100]} width={40} />
+              <YAxis stroke="#475569" fontSize={11} tickLine={false} domain={[0, 100]} width={28} />
               <Tooltip {...tooltipStyle} />
               <Area type="monotone" dataKey="value" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.1} strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </Card>
 
-        <Card className="p-5">
-          <div className="mb-5 flex items-center gap-2">
+        <Card className="py-5 pr-5 pl-3">
+          <div className="mb-6 flex items-center gap-2">
             <MemoryStick className="h-4 w-4 text-purple-400" />
             <h3 className="font-semibold text-white">Memory Usage</h3>
             {info && (
@@ -141,9 +141,9 @@ export default function Dashboard() {
             )}
           </div>
           <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={memHistory} margin={{ top: 8, right: 0, left: 0, bottom: 0 }}>
+            <AreaChart data={memHistory} margin={{ top: 18, right: 0, left: 0, bottom: 0 }}>
               <XAxis dataKey="time" stroke="#475569" fontSize={11} tickLine={false} />
-              <YAxis stroke="#475569" fontSize={11} tickLine={false} domain={[0, 100]} width={40} />
+              <YAxis stroke="#475569" fontSize={11} tickLine={false} domain={[0, 100]} width={28} />
               <Tooltip {...tooltipStyle} />
               <Area type="monotone" dataKey="value" stroke="#a855f7" fill="#a855f7" fillOpacity={0.1} strokeWidth={2} />
             </AreaChart>
@@ -182,8 +182,8 @@ export default function Dashboard() {
 
       {/* Network - two half-size graphs side by side */}
       <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card className="p-5">
-          <div className="mb-5 flex items-center gap-2">
+        <Card className="py-5 pr-5 pl-3">
+          <div className="mb-6 flex items-center gap-2">
             <ArrowDownToLine className="h-4 w-4 text-green-400" />
             <h3 className="font-semibold text-white">Network Down</h3>
             {netDownHistory.length > 0 && (
@@ -195,8 +195,8 @@ export default function Dashboard() {
           <BrailleGraph data={netDownHistory.map((p) => p.value)} />
         </Card>
 
-        <Card className="p-5">
-          <div className="mb-5 flex items-center gap-2">
+        <Card className="py-5 pr-5 pl-3">
+          <div className="mb-6 flex items-center gap-2">
             <ArrowUpFromLine className="h-4 w-4 text-orange-400" />
             <h3 className="font-semibold text-white">Network Up</h3>
             {netUpHistory.length > 0 && (
