@@ -50,7 +50,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-6">
-      <PageHeader title="Dashboard" subtitle={info ? `${info.name} · ${info.operatingSystem}` : 'Loading server info...'} />
+      <PageHeader title="Dashboard" subtitle={info ? info.operatingSystem : 'Loading server info...'} />
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map(({ label, value, sub, icon: Icon, color, link }) => (
