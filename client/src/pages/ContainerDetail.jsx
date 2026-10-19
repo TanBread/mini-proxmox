@@ -151,9 +151,9 @@ export default function ContainerDetail() {
 
       {tab === 'overview' && (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <Card className="p-5 text-[13px]">
+          <Card className="p-5 text-[0.8125rem]">
             <h3 className="mb-4 font-semibold text-white">Details</h3>
-            <dl className="space-y-3 text-[13px]">
+            <dl className="space-y-3 text-[0.8125rem]">
               {[
                 ['Uptime', formatUptime(info.startedAt)],
                 ['Image & Version', info.image],
@@ -167,7 +167,7 @@ export default function ContainerDetail() {
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between border-b border-slate-800 pb-2">
                   <dt className="text-slate-500">{k}</dt>
-                  <dd className="text-slate-300 font-mono text-[13px]">{v}</dd>
+                  <dd className="text-slate-300 font-mono text-[0.8125rem]">{v}</dd>
                 </div>
               ))}
             </dl>
