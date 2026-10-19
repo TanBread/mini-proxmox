@@ -46,12 +46,3 @@ Dashboard, Containers, Images, Networks, Volumes, Terminal (with sudo), File edi
 |----------|----------|------|
 | admin | admin12345 | full access |
 | user | user123456 | read-only |
-
-## Development
-
-```bash
-cd server && npm install && npm run dev
-cd client && npm install && npm run dev
-```
-
-Open http://localhost:5173
