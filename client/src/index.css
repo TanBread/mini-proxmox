@@ -20,6 +20,10 @@
   scrollbar-color: #475569 transparent;
 }
 
+html {
+  font-size: 17px;
+}
+
 body {
   @apply bg-[#020617] text-slate-200 antialiased;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;

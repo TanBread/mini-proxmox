@@ -17,11 +17,11 @@ export function StatusBadge({ state }) {
   }
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium ${
         styles[state] || styles.exited
       }`}
     >
-      <span className={`h-1.5 w-1.5 rounded-full ${dot[state] || dot.exited}`} />
+      <span className={`h-2 w-2 rounded-full ${dot[state] || dot.exited}`} />
       {state.charAt(0).toUpperCase() + state.slice(1)}
     </span>
   )
@@ -56,7 +56,7 @@ export function Button({ children, onClick, variant = 'default', size = 'md', di
     ghost: 'bg-transparent text-slate-400 hover:bg-slate-800 hover:text-slate-200 border-transparent',
   }
   const sizes = {
-    sm: 'px-2.5 py-1 text-xs',
+    sm: 'px-3 py-1.5 text-sm',
     md: 'px-3.5 py-1.5 text-sm',
   }
   return (
